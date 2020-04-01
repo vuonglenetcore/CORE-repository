@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using coreShop.Data.EF;
 
 namespace coreShop.Data.Migrations
 {
     [DbContext(typeof(coreShopDbContext))]
-    partial class coreShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200401072021_table-identity")]
+    partial class tableidentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,13 +94,6 @@ namespace coreShop.Data.Migrations
                     b.HasKey("UserId", "RoleId");
 
                     b.ToTable("AppUserRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
-                            RoleId = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc")
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -175,16 +170,6 @@ namespace coreShop.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
-                            ConcurrencyStamp = "be03b1f4-455b-477d-901d-e05d87867b69",
-                            Description = "Administrator role",
-                            Name = "admin",
-                            NormalizedName = "admin"
-                        });
                 });
 
             modelBuilder.Entity("coreShop.Data.Entities.AppUser", b =>
@@ -251,27 +236,6 @@ namespace coreShop.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("69bd714f-9576-45ba-b5b7-f00649be00de"),
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "07e8776e-7d78-40cd-978f-4d95feb78105",
-                            Dob = new DateTime(2020, 1, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "tedu.international@gmail.com",
-                            EmailConfirmed = true,
-                            FirstName = "Le",
-                            LastName = "Vuong",
-                            LockoutEnabled = false,
-                            NormalizedEmail = "tedu.international@gmail.com",
-                            NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEESAV5Ow39k8QEgXDcyCnL73sVt0N4SfUxxwRTEAqOc40la0OF9wN+apvRHkxcE/Yg==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
-                        });
                 });
 
             modelBuilder.Entity("coreShop.Data.Entities.Cart", b =>
@@ -282,6 +246,9 @@ namespace coreShop.Data.Migrations
                         .HasAnnotation("SqlServer:IdentityIncrement", 1)
                         .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<Guid?>("AppUserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
@@ -300,9 +267,9 @@ namespace coreShop.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("AppUserId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Carts");
                 });
@@ -517,10 +484,13 @@ namespace coreShop.Data.Migrations
                         .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<Guid?>("AppUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("OrderDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2020, 4, 1, 14, 36, 15, 630, DateTimeKind.Local).AddTicks(3218));
+                        .HasDefaultValue(new DateTime(2020, 4, 1, 14, 20, 20, 932, DateTimeKind.Local).AddTicks(6939));
 
                     b.Property<string>("ShipAddress")
                         .IsRequired()
@@ -551,7 +521,7 @@ namespace coreShop.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("AppUserId");
 
                     b.ToTable("Orders");
                 });
@@ -616,7 +586,7 @@ namespace coreShop.Data.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2020, 4, 1, 14, 36, 15, 665, DateTimeKind.Local).AddTicks(2841),
+                            DateCreated = new DateTime(2020, 4, 1, 14, 20, 20, 948, DateTimeKind.Local).AddTicks(4349),
                             OriginalPrice = 100000m,
                             Price = 200000m,
                             Stock = 0,
@@ -800,9 +770,6 @@ namespace coreShop.Data.Migrations
                     b.Property<DateTime>("TransactionDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
@@ -812,15 +779,13 @@ namespace coreShop.Data.Migrations
 
             modelBuilder.Entity("coreShop.Data.Entities.Cart", b =>
                 {
+                    b.HasOne("coreShop.Data.Entities.AppUser", null)
+                        .WithMany("Carts")
+                        .HasForeignKey("AppUserId");
+
                     b.HasOne("coreShop.Data.Entities.Product", "Product")
                         .WithMany("Carts")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("coreShop.Data.Entities.AppUser", "AppUser")
-                        .WithMany("Carts")
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -842,11 +807,9 @@ namespace coreShop.Data.Migrations
 
             modelBuilder.Entity("coreShop.Data.Entities.Order", b =>
                 {
-                    b.HasOne("coreShop.Data.Entities.AppUser", "AppUser")
+                    b.HasOne("coreShop.Data.Entities.AppUser", null)
                         .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AppUserId");
                 });
 
             modelBuilder.Entity("coreShop.Data.Entities.OrderDetail", b =>
@@ -896,7 +859,7 @@ namespace coreShop.Data.Migrations
 
             modelBuilder.Entity("coreShop.Data.Entities.Transaction", b =>
                 {
-                    b.HasOne("coreShop.Data.Entities.AppUser", "AppUser")
+                    b.HasOne("coreShop.Data.Entities.AppUser", null)
                         .WithMany("Transactions")
                         .HasForeignKey("AppUserId");
                 });

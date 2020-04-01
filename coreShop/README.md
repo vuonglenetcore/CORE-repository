@@ -19,3 +19,9 @@ trong file dbcontext ghi thêm
 modelBuilder.Seed();
 
 chạy lệnh: update-database
+
+##table identity
+1. kế thua identitydbcontext
+2. them bảng AppRole. AppUser (mục đích thêm trường)
+3. configuration table
+4. khai báo trong dbcontext
