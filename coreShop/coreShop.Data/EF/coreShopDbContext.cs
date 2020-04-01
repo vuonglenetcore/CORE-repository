@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using coreShop.Data.Configurations;
 using coreShop.Data.Entities;
+using eShopSolution.Data.Extensions;
 
 namespace coreShop.Data.EF
 {
@@ -31,6 +32,8 @@ namespace coreShop.Data.EF
             modelBuilder.ApplyConfiguration(new PromotionConfiguration());
             modelBuilder.ApplyConfiguration(new TransactionConfiguration());
 
+            //Data seeding
+            modelBuilder.Seed();
             //base.OnModelCreating(modelBuilder);
         }
 
