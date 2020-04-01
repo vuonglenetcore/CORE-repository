@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\coreShop.Data\coreShop.Data.csproj" />
+    <ProjectReference Include="..\coreShop.Utilities\coreShop.Utilities.csproj" />
   </ItemGroup>
 
 </Project>
