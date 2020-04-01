@@ -12,3 +12,10 @@
 ## Youtube tutorial
 ## How to configure and run
 ## How to contribute
+
+## Data seeding
+trong file dbcontext ghi thêm 
+//Data seeding
+modelBuilder.Seed();
+
+chạy lệnh: update-database
