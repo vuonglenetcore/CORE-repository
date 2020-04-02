@@ -1,6 +1,5 @@
-﻿using coreShop.Application.Catalog.Products.Dtos;
-using coreShop.Application.Catalog.Products.Dtos.Public;
-using coreShop.Application.Dtos;
+﻿using coreShop.ViewModel.Catalog.Products;
+using coreShop.ViewModel.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +9,6 @@ namespace coreShop.Application.Catalog.Products.Dtos
 {
     public interface IPublicProductService
     {
-        Task<PageResult<ProductViewModel>> GetAllByCategoryId(GetProductPagingRequest request);
+        Task<PageResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductPagingRequest request);
     }
 }

@@ -1,6 +1,4 @@
 ﻿using coreShop.Application.Catalog.Products.Dtos;
-using coreShop.Application.Catalog.Products.Dtos.Public;
-using coreShop.Application.Dtos;
 using coreShop.Data.EF;
 using System;
 using System.Collections.Generic;
@@ -8,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using coreShop.ViewModel.Common;
+using coreShop.ViewModel.Catalog.Products;
 
 namespace coreShop.Application.Catalog.Products
 {
@@ -18,7 +18,7 @@ namespace coreShop.Application.Catalog.Products
         {
             _context = context;
         }
-        public async Task<PageResult<ProductViewModel>> GetAllByCategoryId(GetProductPagingRequest request)
+        public async Task<PageResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductPagingRequest request)
         {
             //1. select join product
             var query = from p in _context.products
@@ -61,7 +61,5 @@ namespace coreShop.Application.Catalog.Products
 
             return pagedResult;
         }
-
-
     }
 }
