@@ -27,3 +27,10 @@ chạy lệnh: update-database
 4. khai báo trong dbcontext
 
 ## Bai 16 ghi file 
+## tao web api
+1. tao project
+2. tao kết nối data trong dEVELOPMENT.JSON và startUp
+	public void ConfigureServices(IServiceCollection services)
+
+3. khai báo DI kết nối service
+4. tiêm service, viết phương thức api bên controller gọi method service

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\coreShop.Application\coreShop.Application.csproj" />
+    <ProjectReference Include="..\coreShop.Data\coreShop.Data.csproj" />
+    <ProjectReference Include="..\coreShop.Utilities\coreShop.Utilities.csproj" />
+    <ProjectReference Include="..\coreShop.ViewModel\coreShop.ViewModel.csproj" />
+  </ItemGroup>
+
+
+
+</Project>
