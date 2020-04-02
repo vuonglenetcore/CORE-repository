@@ -36,6 +36,7 @@ namespace coreShop.Data.EF
 
             modelBuilder.ApplyConfiguration(new AppUserConfiguration());
             modelBuilder.ApplyConfiguration(new AppRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductImageConfiguration());
 
             //config identity table
             modelBuilder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
