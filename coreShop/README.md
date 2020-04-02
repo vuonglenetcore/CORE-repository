@@ -25,3 +25,5 @@ chạy lệnh: update-database
 2. them bảng AppRole. AppUser (mục đích thêm trường)
 3. configuration table
 4. khai báo trong dbcontext
+
+## Bai 16 ghi file 
