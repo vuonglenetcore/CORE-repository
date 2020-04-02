@@ -34,3 +34,11 @@ chạy lệnh: update-database
 
 3. khai báo DI kết nối service
 4. tiêm service, viết phương thức api bên controller gọi method service
+
+## Swashbuckle.AspNetCore
+1. cài đặt Swashbuckle.AspNetCore
+2. https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-3.1&tabs=visual-studio
+	- services.AddSwaggerGen(...)
+	- app.UseSwagger();
+	-  app.UseSwaggerUI(...)
+3. Chỉ định "launchUrl": "swagger", trong launchSetting.json

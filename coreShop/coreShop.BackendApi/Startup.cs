@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
 namespace coreShop.BackendApi
 {
@@ -36,6 +37,12 @@ namespace coreShop.BackendApi
             services.AddTransient<IPublicProductService, PublicProductService>();
 
             services.AddControllersWithViews();
+
+            //AddSwaggerGen
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger coreShop", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +64,14 @@ namespace coreShop.BackendApi
             app.UseRouting();
 
             app.UseAuthorization();
+
+            //user sawegger
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "swagger coreShop V1");
+            });
 
             app.UseEndpoints(endpoints =>
             {
