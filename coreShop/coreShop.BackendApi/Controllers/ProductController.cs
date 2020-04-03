@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using coreShop.Application.Catalog.Products;
+using coreShop.ViewModel.Catalog.ProductImages;
 using coreShop.ViewModel.Catalog.Products;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace coreShop.BackendApi.Controllers
 {
+    //api/product
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
@@ -21,19 +23,12 @@ namespace coreShop.BackendApi.Controllers
             _manageProductService = manageProductService;
         }
 
-        //http:localhost:port/products
-        [HttpGet]
-        public  async Task<IActionResult> Get(string languageId)
-        {
-            var product = await _publicProductService.GetAll(languageId);
-            return Ok(product);
-        }
 
-        //http:localhost:port/products/public-paging
-        [HttpGet("public-paging")]
-        public  async Task<IActionResult> Get([FromQuery]GetPublicProductPagingRequest request)
+        //http:localhost:port/products>pageIndex=1&pageSize=10&languageId=vi-VN
+        [HttpGet("{languageId}")]
+        public  async Task<IActionResult> GetPaging(string languageId, [FromQuery]GetPublicProductPagingRequest request)
         {
-            var product = await _publicProductService.GetAllByCategoryId(request);
+            var product = await _publicProductService.GetAllByCategoryId(languageId, request);
             return Ok(product);
         }
 
@@ -97,5 +92,64 @@ namespace coreShop.BackendApi.Controllers
             return BadRequest();
            
         }
+
+        #region IMAGE
+        [HttpGet("{productId}/images/{imageId}")]
+        public async Task<IActionResult> GetImageById(int productId, int imageId)
+        {
+            var image = await _manageProductService.GetImageById(imageId);
+            if (image == null)
+                return BadRequest("Cannot find product");
+            return Ok(image);
+        }
+
+        [HttpPost("{productId}/images")]
+        public async Task<IActionResult> CreateImage(int productId, [FromForm]ProductImageCreateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var imageId = await _manageProductService.AddImages(productId, request);
+            if (productId == 0)
+                return BadRequest();
+
+            var image = await _manageProductService.GetImageById(imageId);
+
+            return CreatedAtAction(nameof(GetImageById), new { id = imageId }, image);
+        }
+
+
+        [HttpPut("images/{imageId}")]
+        public async Task<IActionResult> UpdateImage(int imageId, [FromForm]ProductImageUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result= await _manageProductService.UpdateImage(imageId, request);
+            if (result == 0)
+                return BadRequest();
+
+            return Ok();
+        }
+
+        [HttpDelete("images/{imageId}")]
+        public async Task<IActionResult> RemoveImage(int imageId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result= await _manageProductService.RemoveImages(imageId);
+            if (result == 0)
+                return BadRequest();
+
+            return Ok();
+        }
+
+
+        
+        #endregion
     }
 }

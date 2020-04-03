@@ -13,11 +13,13 @@ using Microsoft.AspNetCore.Http;
 using System.Net.Http.Headers;
 using System.IO;
 using coreShop.Application.Common;
+using coreShop.ViewModel.Catalog.ProductImages;
 
 namespace coreShop.Application.Catalog.Products
 {
     public class ManageProductService : IManageProductService
     {
+
         private readonly coreShopDbContext _context;
         private readonly IStorageService _storageService;
         public ManageProductService(coreShopDbContext context, IStorageService storageService)
@@ -26,10 +28,7 @@ namespace coreShop.Application.Catalog.Products
             _storageService = storageService;
         }
 
-        public Task<int> AddImages(int productId, List<IFormFile> files)
-        {
-            throw new NotImplementedException();
-        }
+
 
         public async Task AddViewCount(int productId)
         {
@@ -96,7 +95,7 @@ namespace coreShop.Application.Catalog.Products
             }
             _context.products.Remove(product);
             return await _context.SaveChangesAsync();
-            
+
         }
 
         public async Task<PageResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request)
@@ -142,7 +141,7 @@ namespace coreShop.Application.Catalog.Products
                 TotalRecord = totalRow
             };
 
-            return  pagedResult;
+            return pagedResult;
         }
 
         public async Task<ProductViewModel> GetById(int productId, string languageId)
@@ -170,15 +169,7 @@ namespace coreShop.Application.Catalog.Products
             return productViewModel;
         }
 
-        public Task<List<ProductImageViewModel>> GetListImage(int productId)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<int> RemoveImages(int imageId)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<int> Update(ProductUpdateRequest request)
         {
@@ -210,11 +201,6 @@ namespace coreShop.Application.Catalog.Products
             return await _context.SaveChangesAsync();
         }
 
-        public Task<int> UpdateImage(int imageId, string caption, bool isDefault)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<bool> UpdatePrice(int productId, decimal newPrice)
         {
             var product = await _context.products.FindAsync(productId);
@@ -236,5 +222,87 @@ namespace coreShop.Application.Catalog.Products
             await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
             return fileName;
         }
+
+        #region image
+        public async Task<int> AddImages(int productId, ProductImageCreateRequest request)
+        {
+            var productImage = new ProductImage()
+            {
+                Caption = request.Caption,
+                DateCreated = DateTime.Now,
+                IsDefault = request.IsDefault,
+                ProductId = productId,
+                SortOrder = request.SortOrder
+            };
+            if (request.imageFile != null)
+            {
+                productImage.ImagePath = await this.SaveFile(request.imageFile);
+                productImage.FileSize = request.imageFile.Length;
+            }
+            _context.ProductImages.Add(productImage);
+            await _context.SaveChangesAsync();
+            return productImage.Id;
+        }
+        public async Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request)
+        {
+            var productImage = await _context.ProductImages.FindAsync(imageId);
+            if (productImage == null)
+                throw new coreShopExceptions($"Cannot fint an image whit id {imageId}");
+
+
+            if (request.imageFile != null)
+            {
+                productImage.ImagePath = await this.SaveFile(request.imageFile);
+                productImage.FileSize = request.imageFile.Length;
+            }
+            _context.ProductImages.Update(productImage);
+            return await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<ProductImageViewModel>> GetListImage(int productId)
+        {
+            return await _context.ProductImages.Where(x => x.ProductId == productId).Select(i => new ProductImageViewModel()
+            {
+                Caption = i.Caption,
+                DateCreated = i.DateCreated,
+                FileSize = i.FileSize,
+                Id = i.Id,
+                ImagePath = i.ImagePath,
+                IsDefault = i.IsDefault,
+                ProductId = i.ProductId,
+                SortOrder = i.SortOrder
+            }).ToListAsync();
+
+        }
+
+        public async Task<int> RemoveImages(int imageId)
+        {
+            var productImage = await _context.ProductImages.FindAsync(imageId);
+            if (productImage == null)
+                throw new coreShopExceptions($"Cannot fint an image whit id {imageId}");
+            _context.ProductImages.Remove(productImage);
+            return  await _context.SaveChangesAsync();
+        }
+
+        public async Task<ProductImageViewModel> GetImageById(int imageId)
+        {
+            var image = await _context.ProductImages.FindAsync(imageId);
+            if (image == null)
+                throw new coreShopExceptions($"Cannot fint an image whit id {imageId}");
+            var viewModel = new ProductImageViewModel()
+            {
+                Caption = image.Caption,
+                DateCreated = image.DateCreated,
+                FileSize = image.FileSize,
+                Id = image.Id,
+                ImagePath = image.ImagePath,
+                IsDefault = image.IsDefault,
+                ProductId = image.ProductId,
+                SortOrder = image.SortOrder
+            };
+            return viewModel;
+        }
+
+        #endregion
     }
 }
