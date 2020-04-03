@@ -13,11 +13,12 @@ namespace coreShop.Application.Catalog.Products
         Task<int> Create(ProductCreateRequest request);
         Task<int> Update(ProductUpdateRequest request);
         Task<int> Delete(int productId);
-        Task<int> UpdatePrice(int productId, decimal newPrice);
+        Task<bool> UpdatePrice(int productId, decimal newPrice);
         Task<int> UpdateStock(int productId, int addedQuantity);
         Task AddViewCount(int productId);
         Task<PageResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request);
 
+        Task<ProductViewModel> GetById(int productId, string languageId);
         Task<int> AddImages(int productId, List<IFormFile> files);
 
         Task<int> RemoveImages(int imageId);

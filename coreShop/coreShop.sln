@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "coreShop.Application", "cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "coreShop.Data", "coreShop.Data\coreShop.Data.csproj", "{E010DF80-1759-4F6A-AC27-09EDD56CDB08}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BCF44ECE-123E-4133-BECD-79A2B3A558D5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.Solution Items", "0.Solution Items", "{BCF44ECE-123E-4133-BECD-79A2B3A558D5}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
@@ -18,7 +18,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "coreShop.Utilities", "coreS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "coreShop.ViewModel", "coreShop.ViewModel\coreShop.ViewModel.csproj", "{1011BBD2-6A98-4A9F-A380-DB27099F4DF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "coreShop.BackendApi", "coreShop.BackendApi\coreShop.BackendApi.csproj", "{59C3210F-04F7-4926-9C12-6525E68AF0A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "coreShop.BackendApi", "coreShop.BackendApi\coreShop.BackendApi.csproj", "{59C3210F-04F7-4926-9C12-6525E68AF0A2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Domain", "2.Domain", "{D503ED7F-7D6C-4AB4-AEF9-7C3EC713470E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Hosts", "3.Hosts", "{CB7B9DAD-9253-4857-80E2-9E801B9ECF60}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.Infrastructure", "1.Infrastructure", "{02CC857B-3864-4A71-9C20-CB55B3D7C136}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +59,14 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{02AD1762-9402-4A34-B786-C87724B205E4} = {D503ED7F-7D6C-4AB4-AEF9-7C3EC713470E}
+		{E010DF80-1759-4F6A-AC27-09EDD56CDB08} = {D503ED7F-7D6C-4AB4-AEF9-7C3EC713470E}
+		{6064BD39-244A-4EAB-A609-ED0136B57A49} = {CB7B9DAD-9253-4857-80E2-9E801B9ECF60}
+		{16E5BFBD-7CEA-4199-8824-8D4BBC52D79F} = {02CC857B-3864-4A71-9C20-CB55B3D7C136}
+		{1011BBD2-6A98-4A9F-A380-DB27099F4DF9} = {02CC857B-3864-4A71-9C20-CB55B3D7C136}
+		{59C3210F-04F7-4926-9C12-6525E68AF0A2} = {CB7B9DAD-9253-4857-80E2-9E801B9ECF60}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E73DDEE7-8664-44A0-B764-D14DCC58CF40}
