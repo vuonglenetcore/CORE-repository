@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using coreShop.Application.Catalog.Products;
+using coreShop.Application.Common;
 using coreShop.Data.EF;
 using coreShop.Utilities.Contants;
 using Microsoft.AspNetCore.Builder;
@@ -35,6 +36,8 @@ namespace coreShop.BackendApi
 
             //DI service
             services.AddTransient<IPublicProductService, PublicProductService>();
+            services.AddTransient<IManageProductService, ManageProductService>();
+            services.AddTransient<IStorageService, FileStorageService>();
 
             services.AddControllersWithViews();
 
