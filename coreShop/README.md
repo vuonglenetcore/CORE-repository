@@ -42,3 +42,15 @@ chạy lệnh: update-database
 	- app.UseSwagger();
 	-  app.UseSwaggerUI(...)
 3. Chỉ định "launchUrl": "swagger", trong launchSetting.json
+
+## api đăng kí đăng nhập
+- Tạo IUserservice, Userservice
+- DI service
+ //services.AddIdentity<AppUser, AppRole>()
+   //     .AddEntityFrameworkStores<coreShopDbContext>()
+//     .AddDefaultTokenProviders();
+
+services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<coreShopDbContext>().AddDefaultTokenProviders();
+
+- tạo tocken trong appsettings api
+- tao controller
