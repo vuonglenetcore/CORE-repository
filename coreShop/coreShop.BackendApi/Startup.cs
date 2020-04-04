@@ -1,14 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using coreShop.Application.Catalog.Products;
 using coreShop.Application.Common;
+using coreShop.Application.System.Users;
 using coreShop.Data.EF;
+using coreShop.Data.Entities;
 using coreShop.Utilities.Contants;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,12 +32,20 @@ namespace coreShop.BackendApi
             services.AddDbContext<coreShopDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString(SystemContants.MainConnectionString)));
             //end tao ket noi db
+            //services.AddIdentity<AppUser, AppRole>()
+            //     .AddEntityFrameworkStores<coreShopDbContext>()
+            //     .AddDefaultTokenProviders();
 
+            services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<coreShopDbContext>().AddDefaultTokenProviders();
             //DI service
             services.AddTransient<IPublicProductService, PublicProductService>();
             services.AddTransient<IManageProductService, ManageProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
 
+            services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
+            services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
+            services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
+            services.AddTransient<IUserService, UserService>();
             services.AddControllersWithViews();
 
             //AddSwaggerGen
