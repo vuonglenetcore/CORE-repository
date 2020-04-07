@@ -26,6 +26,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Hosts", "3.Hosts", "{CB7B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.Infrastructure", "1.Infrastructure", "{02CC857B-3864-4A71-9C20-CB55B3D7C136}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "scoreShop.AdminApp", "scoreShop.AdminApp\scoreShop.AdminApp.csproj", "{C330C918-7192-4817-A1F8-1B29F5620740}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{59C3210F-04F7-4926-9C12-6525E68AF0A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59C3210F-04F7-4926-9C12-6525E68AF0A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59C3210F-04F7-4926-9C12-6525E68AF0A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C330C918-7192-4817-A1F8-1B29F5620740}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C330C918-7192-4817-A1F8-1B29F5620740}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C330C918-7192-4817-A1F8-1B29F5620740}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C330C918-7192-4817-A1F8-1B29F5620740}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{16E5BFBD-7CEA-4199-8824-8D4BBC52D79F} = {02CC857B-3864-4A71-9C20-CB55B3D7C136}
 		{1011BBD2-6A98-4A9F-A380-DB27099F4DF9} = {02CC857B-3864-4A71-9C20-CB55B3D7C136}
 		{59C3210F-04F7-4926-9C12-6525E68AF0A2} = {CB7B9DAD-9253-4857-80E2-9E801B9ECF60}
+		{C330C918-7192-4817-A1F8-1B29F5620740} = {CB7B9DAD-9253-4857-80E2-9E801B9ECF60}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E73DDEE7-8664-44A0-B764-D14DCC58CF40}

@@ -1,5 +1,4 @@
-﻿
-using coreShop.Application.Catalog.Products;
+﻿using coreShop.Application.Catalog.Products;
 using coreShop.Application.Common;
 using coreShop.Application.System.Users;
 using coreShop.Data.EF;
