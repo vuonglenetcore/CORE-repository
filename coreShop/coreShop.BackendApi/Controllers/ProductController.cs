@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using coreShop.Application.Catalog.Products;
 using coreShop.ViewModel.Catalog.ProductImages;
 using coreShop.ViewModel.Catalog.Products;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +14,7 @@ namespace coreShop.BackendApi.Controllers
     //api/product
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IPublicProductService _publicProductService;

@@ -54,3 +54,52 @@ services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<coreShopDbCont
 
 - tạo tocken trong appsettings api
 - tao controller
+
+##Bài Bài 22: Thêm Authorization header cho Swagger
+1. config swagger trong class StartUp.cs  >  services.AddSwaggerGen(c =>
+-	c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme)
+    {...}
+-   c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+	{...}
+- sửa lại   services.AddControllersWithViews(); >   services.AddControllers();
+
+- cấu hình  services.AddAuthentication:
+			string issuer = Configuration.GetValue<string>("Tokens:Issuer");
+            string signingKey = Configuration.GetValue<string>("Tokens:Key");
+            byte[] signingKeyBytes = System.Text.Encoding.UTF8.GetBytes(signingKey);
+
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = issuer,
+                    ValidateAudience = true,
+                    ValidAudience = issuer,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ClockSkew = System.TimeSpan.Zero,
+                    IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes)
+                };
+            });
+
+- config trong contrller (ngăn không cho vào controller khi chưa đăng nhập)
+    //api/product
+    [Route("api/[controller]")]
+    [ApiController]
+    [Authorize]
+-> chạy lên có button authorize trên trình duyệt
+2. Cách test athocation
+- Chưa đăng nhập
+get -> trả về 401
+- đăng nhập đúng, get sai mã token sai
+get -> trả về 401
+-Đăng nhập đúng lấy mã token > button authorize > Bearer maToKen > click
+- get > trả về 200 get ra sản phẩm
