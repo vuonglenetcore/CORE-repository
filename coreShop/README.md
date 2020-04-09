@@ -136,3 +136,76 @@ https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-compilation?view=asp
 - *chú ý dùng [FormBody] đồng nhất với bên controlller của admin trả về api
 8. Chạy multi api . admin
 - đăng nhập lấy về dc token -->>>ok
+
+##Bài 26 chứng thực với cookies không dùng identity
+1. Chỉnh sửa lại service api return về 1 token, không phải 1 oject token
+2. Chỉnh sửa lại host:  "launchBrowser": false, không cần show swagger lên nữa
+3. Copy token vào appsetting.json
+4. Viết phương thức giải mã token bên controller user admin
+    private ClaimsPrincipal ValidateToken(string jwtToken)
+        {
+            IdentityModelEventSource.ShowPII = true;
+            SecurityToken validatedToken;
+            TokenValidationParameters validationParameters = new TokenValidationParameters();
+
+            validationParameters.ValidateLifetime = true;
+            validationParameters.ValidAudience = _configuration["Tokens:Issuer"];
+            validationParameters.ValidIssuer = _configuration["Tokens:Issuer"];
+            validationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
+
+            ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);
+            return principal;
+        }
+5.chỉnh sữa lại phương thức post vào login()
+    [HttpPost]
+        public async Task<IActionResult> Login(LoginRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View(ModelState);
+            var token = await _userApiClient.Authenticate(request);
+            var usePrinpical = this.ValidateToken(token);
+            var authProperties = new AuthenticationProperties
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                IsPersistent = true
+            };
+            await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            usePrinpical,
+            authProperties);
+
+            return RedirectToAction("Index", "Home");
+        }
+6. chỉnh sửa lại phương thức login get
+        [HttpGet]
+        public async Task<IActionResult> Login()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return View();
+        }
+7. [Authorize] trang HomeController admin không cho phép vào khi chưa đăng nhập
+8. Cấu hình trong starUp
+    services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/User/Login/";
+                options.AccessDeniedPath = "/User/Forbidden/";
+            });
+    
+    app.UseAuthentication(); *trên routing và UseAuthorization
+9. lấy username bên home/index
+-   var user = User.Identity.Name;
+-   Gắn vào layout @User.Identity.Name
+
+10. phương thức logout
+- bên layoutview
+    <form method="post" asp-controller="User" asp-action="Logout">
+          <button type="submit" class="dropdown-item">Đăng xuất</button>
+    </form>
+- Controller
+     public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login", "User");
+        }
+*gọi lại phương thức logout như khi vào method login (ngăn không vào được trang khác)

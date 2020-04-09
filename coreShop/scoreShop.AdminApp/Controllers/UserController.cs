@@ -1,6 +1,16 @@
 ﻿using coreShop.ViewModel.System.Users;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
 using scoreShop.AdminApp.Services;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace scoreShop.AdminApp.Controllers
@@ -8,10 +18,11 @@ namespace scoreShop.AdminApp.Controllers
     public class UserController : Controller
     {
         private readonly IUserApiClient _userApiClient;
+        private readonly IConfiguration _configuration;
 
-        public UserController(IUserApiClient userApiClient)
+        public UserController(IUserApiClient userApiClient, IConfiguration configuration)
         {
-            _userApiClient = userApiClient;
+            _userApiClient = userApiClient; _configuration = configuration;
         }
 
         public IActionResult Index()
@@ -19,8 +30,10 @@ namespace scoreShop.AdminApp.Controllers
             return View();
         }
 
-        public IActionResult Login()
+        [HttpGet]
+        public async Task<IActionResult> Login()
         {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return View();
         }
 
@@ -30,7 +43,40 @@ namespace scoreShop.AdminApp.Controllers
             if (!ModelState.IsValid)
                 return View(ModelState);
             var token = await _userApiClient.Authenticate(request);
-            return View(token);
+            var usePrinpical = this.ValidateToken(token);
+            var authProperties = new AuthenticationProperties
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                IsPersistent = false
+            };
+            await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            usePrinpical,
+            authProperties);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        //phương thức giải mã token
+        private ClaimsPrincipal ValidateToken(string jwtToken)
+        {
+            IdentityModelEventSource.ShowPII = true;
+            SecurityToken validatedToken;
+            TokenValidationParameters validationParameters = new TokenValidationParameters();
+
+            validationParameters.ValidateLifetime = true;
+            validationParameters.ValidAudience = _configuration["Tokens:Issuer"];
+            validationParameters.ValidIssuer = _configuration["Tokens:Issuer"];
+            validationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
+
+            ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);
+            return principal;
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login", "User");
         }
     }
 }
