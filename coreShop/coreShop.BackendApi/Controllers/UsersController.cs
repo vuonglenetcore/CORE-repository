@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using coreShop.Application.System.Users;
+﻿using coreShop.Application.System.Users;
 using coreShop.ViewModel.System.Users;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace eShopSolution.BackendApi.Controllers
 {
@@ -22,7 +18,7 @@ namespace eShopSolution.BackendApi.Controllers
         }
 
         [HttpPost("authenticate")]
-        [AllowAnonymous]//chua dang nhap van goi vao dc method nay 
+        [AllowAnonymous]//chua dang nhap van goi vao dc method nay
         public async Task<IActionResult> Authenticate([FromBody]LoginRequest request)
         {
             if (!ModelState.IsValid)
@@ -33,7 +29,7 @@ namespace eShopSolution.BackendApi.Controllers
             {
                 return BadRequest("Username or password is incorrect.");
             }
-            return Ok(new { token = resultToken });
+            return Ok(resultToken);
         }
 
         [HttpPost("register")]
